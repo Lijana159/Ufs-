@@ -1,0 +1,99 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UFS Online Shopping</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f4f4; }
+        header { background-color: #222; color: white; padding: 15px; text-align: center; }
+        .container { display: flex; flex-wrap: wrap; justify-content: center; padding: 20px; }
+        .product { background: white; border: 1px solid #ddd; border-radius: 5px; width: 250px; margin: 10px; text-align: center; padding: 10px; }
+        .product img { max-width: 100%; height: auto; border-radius: 5px; }
+        .product h3 { margin: 10px 0; }
+        .product p { font-size: 18px; color: green; }
+        button { background-color: #28a745; color: white; border: none; padding: 10px 15px; cursor: pointer; }
+        button:hover { background-color: #218838; }
+        #cart { background: white; padding: 20px; margin: 20px; border-radius: 5px; max-width: 400px; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>UFS Online Shopping</h1>
+</header>
+
+<div class="container" id="product-list">
+    <div class="product">
+        <img src="https://images.openai.com/thumbnails/url/PuXnT3icu1mUUVJSUGylr5-al1xUWVCSmqJbkpRnoJdeXJJYkpmsl5yfq5-Zm5ieWmxfaAuUsXL0S7F0Tw7UtSw0MolMSszPqjQKCErND3PPzfQqqLIMMzLIqcosDzJ1rDD1SM-pqvQLdCzPsQg1iPdLzwgoCClQKwYAx38plA" alt="Camouflage Utility Jacket">
+        <h3>Camouflage Utility Jacket</h3>
+        <p>R500</p>
+        <button onclick="addToCart('Camouflage Utility Jacket', 500)">Add to Cart</button>
+    </div>
+    <div class="product">
+        <img src="https://images.openai.com/thumbnails/url/NcZyTnicu1mSUVJSUGylr5-al1xUWVCSmqJbkpRnoJdeXJJYkpmsl5yfq5-Zm5ieWmxfaAuUsXL0S7F0Tw6Jj8or8koPiMwzNs8Jj3T2iPc1TMsO9nf1z_J0Si51MTYu9c5NSbJMNrAoCApwSi2rTCuydAtyD3a1CFQrBgAUTCli" alt="Air Force Printed T-Shirt">
+        <h3>Air Force Printed T-Shirt</h3>
+        <p>R550</p>
+        <button onclick="addToCart('Air Force Printed T-Shirt', 550)">Add to Cart</button>
+    </div>
+    <div class="product">
+        <img src="https://images.openai.com/thumbnails/url/0X6rt3icu1mSUVJSUGylr5-al1xUWVCSmqJbkpRnoJdeXJJYkpmsl5yfq5-Zm5ieWmxfaAuUsXL0S7F0Tw5yzy-OLDMuM_W1DEj2Sw0pM0nPzw8sqkw186zyqvA1NjAtDgsoTXYJSE4z8jZMS3XxdTdKN60o9k7OTlcrBgAkiCoB" alt="Uniform Ensemble">
+        <h3>Uniform Jacket + Trousers</h3>
+        <p>R600</p>
+        <button onclick="addToCart('Uniform Jacket + Trousers', 600)">Add to Cart</button>
+    </div>
+    <div class="product">
+        <img src="https://images.openai.com/thumbnails/url/lMroXHicu1mUUVJSUGylr5-al1xUWVCSmqJbkpRnoJdeXJJYkpmsl5yfq5-Zm5ieWmxfaAuUsXL0S7F0Tw6OKslID_EzD0opM_J2SsoIdk0PdvL30XXPNvOp8jfJSMo0MHH2LNQN0DXTDXFLLfRPC_axKMiqCEtVKwYAq-ooRA" alt="Service Dress Jacket">
+        <h3>Enlisted Service Dress Jacket</h3>
+        <p>R700</p>
+        <button onclick="addToCart('Enlisted Service Dress Jacket', 700)">Add to Cart</button>
+    </div>
+    <div class="product">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/6/65/Air_force_hat.jpg" alt="Flight Hat">
+        <h3>Flight Hat</h3>
+        <p>R500</p>
+        <button onclick="addToCart('Flight Hat', 500)">Add to Cart</button>
+    </div>
+</div>
+
+<div id="cart">
+    <h2>Shopping Cart</h2>
+    <ul id="cart-items"></ul>
+    <p><strong>Total:</strong> R<span id="cart-total">0</span></p>
+
+    <form action="https://sandbox.payfast.co.za/eng/process" method="post">
+        <input type="hidden" name="merchant_id" value="10000100">
+        <input type="hidden" name="merchant_key" value="46f0cd694581a">
+        <input type="hidden" name="return_url" value="https://www.yoursite.com/success">
+        <input type="hidden" name="cancel_url" value="https://www.yoursite.com/cancel">
+        <input type="hidden" name="notify_url" value="https://www.yoursite.com/notify">
+        <input type="hidden" name="amount" id="payfast-amount" value="0.00">
+        <input type="hidden" name="item_name" value="UFS Online Shopping Cart">
+        <button type="submit">Checkout with PayFast</button>
+    </form>
+</div>
+
+<script>
+    let cart = [];
+    function addToCart(name, price) {
+        cart.push({name, price});
+        renderCart();
+    }
+    function renderCart() {
+        let cartItems = document.getElementById('cart-items');
+        let total = 0;
+        cartItems.innerHTML = '';
+        cart.forEach(item => {
+            total += item.price;
+            let li = document.createElement('li');
+            li.textContent = item.name + ' - R' + item.price;
+            cartItems.appendChild(li);
+        });
+        document.getElementById('cart-total').textContent = total;
+        document.getElementById('payfast-amount').value = total;
+    }
+</script>
+
+</body>
+</html>
